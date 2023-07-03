@@ -1,0 +1,26 @@
+---
+- name: listen for Dynatrace events
+  hosts: all
+
+  ## Define our source for events
+
+  sources:
+    - name: webhook from dynatrace
+      ansible.eda.webhook:
+        host: 0.0.0.0
+        port: 5000
+      filters:
+        - ansible.eda.normalize_keys:
+
+  ## Alert if this problem is in OPEN state and the Source is "OS services monitoring"
+
+  rules:
+    - name: OS Service Monitoring
+      condition: event.payload.State == "OPEN" and event.payload.ProblemDetails.rankedEvents is search("OS services monitoring")
+
+  ## Call automation controller job template to remediate the service
+
+      action:
+        run_job_template:
+          name: EDA Dynatrace Service Restart
+          organization: Default
