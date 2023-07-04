@@ -12,15 +12,19 @@
       filters:
         - ansible.eda.normalize_keys:
 
-  ## Alert if this problem is in OPEN state and the Source is "OS services monitoring"
+  ## OS Service Monitoring
 
   rules:
-    - name: OS Service Monitoring
-      condition: event.payload.State == "OPEN" and event.payload.ProblemDetails.rankedEvents is search("OS services monitoring")
-
-  ## Call automation controller job template to remediate the service
-
+    - name: Windows OS Service Monitoring
+      condition: event.payload.State == "OPEN" and event.payload.ProblemDetails.rankedEvents is search("Auto-start Windows OS Services")
       action:
         run_job_template:
-          name: EDA Dynatrace Service Restart
+          name: Windows EDA Dynatrace Service Restart
+          organization: Default
+
+    - name: Linux OS Service Monitoring
+      condition: event.payload.State == "OPEN" and event.payload.ProblemDetails.rankedEvents is search("Auto-start Linux OS Services")
+      action:
+        run_job_template:
+          name: Linux EDA Dynatrace Service Restart
           organization: Default
