@@ -1,0 +1,55 @@
+---
+
+- name: restart chronyd after eda event
+  hosts: "{{ ansible_eda.event.payload.entity.metadata.name }}"
+  tasks:
+  - name: create servicenow incident
+    servicenow.itsm.incident:
+      caller: eda
+      short_description: "Sensu check is failing - {{ ansible_eda.event.payload.check.metadata.name }}"
+      description: "{{ ansible_eda.event.payload.check.output }}"
+      impact: low
+      urgency: low
+      other:
+        cmdb_ci: "{{ ansible_eda.event.payload.entity.metadata.name }}"
+    delegate_to: localhost
+    register: sn_incident
+    retries: 5
+    delay: 10
+    until: sn_incident is not failed
+
+  - name: print servicenow incident number
+    ansible.builtin.debug:
+      msg: "ServiceNow Incident Number - {{ sn_incident.record.number }}"
+
+  - name: move incident to in_progress
+    servicenow.itsm.incident:
+      number: "{{ sn_incident.record.number }}"
+      state: in_progress
+      other:
+        work_notes: "Event Driven Ansible is investigating"
+    delegate_to: localhost
+    register: update_incident
+    retries: 5
+    delay: 10
+    until: update_incident is not failed
+
+  - name: restart chronyd
+    ansible.builtin.service:
+      name: chronyd
+      state: started
+
+  - name: close servicenow incident
+    servicenow.itsm.incident:
+      state: resolved
+      number: "{{ sn_incident.record.number }}"
+      close_code: "Solved (Permanently)"
+      close_notes: "Resolved by Event Driven Ansible."
+      caller: admin
+      other:
+        work_notes: "Event Driven Ansible has resolved the incident. Leaving it open for review."
+    delegate_to: localhost
+    register: update_incident
+    retries: 5
+    delay: 10
+    until: update_incident is not failed
