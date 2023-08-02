@@ -14,7 +14,7 @@
   ## chronyd process check
 
   rules:
-    - name: test
+    - name: sensu chronyd monitoring
       condition: event.payload.check.state == 'failing' and event.payload.check.metadata.name == 'check-chronyd-process'
       action:
         run_job_template:
