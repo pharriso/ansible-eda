@@ -5,7 +5,7 @@
   tasks:
   - name: create servicenow incident
     servicenow.itsm.incident:
-      caller: eda
+      caller: admin
       short_description: "Sensu check is failing - {{ ansible_eda.event.payload.check.metadata.name }}"
       description: "{{ ansible_eda.event.payload.check.output }}"
       impact: low
