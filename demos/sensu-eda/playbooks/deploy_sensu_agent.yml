@@ -1,0 +1,13 @@
+---
+
+- name: deploy sensu agent
+  hosts: all
+  become: true
+  roles:
+    - sensu.sensu_go.agent
+  vars:
+    agent_config:
+      backend-url: [ "ws://{{ sensu_server }}:8081" ]
+      subscriptions:
+      - system
+

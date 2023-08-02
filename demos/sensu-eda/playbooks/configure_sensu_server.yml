@@ -1,0 +1,87 @@
+---
+
+- hosts: all
+  gather_facts: false
+  vars:
+    eda_server_url: http://aap-eda.sandbox3009.opentlc.com:5000/endpoint
+    sensu_bonsai_assets:
+    - name: sensu/sensu-ruby-runtime
+      version: 0.1.0
+    - name: sensu-plugins/sensu-plugins-process-checks
+      version: 4.1.0
+    - name: jspaleta/sensu-http-handler
+      version: 0.1
+
+  tasks:
+  - name: install assets
+    sensu.sensu_go.bonsai_asset:
+      auth:
+        url: "http://{{ inventory_hostname }}:8080"
+        user: admin
+        password: "{{ sensu_admin_password }}"
+        verify: false
+      name: "{{ item.name }}"
+      version: "{{ item.version }}"
+    delegate_to: localhost
+    loop: "{{ sensu_bonsai_assets }}"
+
+  - name: create handler
+    sensu.sensu_go.pipe_handler:
+      auth:
+        url: "http://{{ inventory_hostname }}:8080"
+        user: admin
+        password: "{{ sensu_admin_password }}"
+        verify: false
+      name: eda_sensu
+      command: sensu-http-handler -u {{ eda_server_url }}
+      runtime_assets: jspaleta/sensu-http-handler
+      filters:
+      - is_incident
+      - not_silenced
+      - state_change_only
+    delegate_to: localhost
+
+  - name: create event filter
+    sensu.sensu_go.filter:
+      auth:
+        url: "http://{{ inventory_hostname }}:8080"
+        user: admin
+        password: "{{ sensu_admin_password }}"
+        verify: false
+      name: state_change_only
+      action: allow
+      expressions:
+        - event.check.occurrences == 1
+    delegate_to: localhost
+
+  - name: check-chronyd-service
+    sensu.sensu_go.check:
+      auth:
+        url: "http://{{ inventory_hostname }}:8080"
+        user: admin
+        password: "{{ sensu_admin_password }}"
+        verify: false
+      name: check-chronyd-process
+      subscriptions: 
+      - system
+      command: check-process.rb -p /usr/sbin/chronyd
+      interval: 60
+      publish: yes
+      handlers:
+      - eda_sensu
+      runtime_assets:
+      - sensu-plugins/sensu-plugins-process-checks
+      - sensu/sensu-ruby-runtime
+    delegate_to: localhost
+
+  - name: create handler set for keepalive
+    sensu.sensu_go.handler_set:
+      auth:
+        url: "http://{{ inventory_hostname }}:8080"
+        user: admin
+        password: "{{ sensu_admin_password }}"
+        verify: false
+      name: keepalive
+      handlers:
+        - eda_sensu
+    delegate_to: localhost

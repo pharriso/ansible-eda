@@ -1,0 +1,22 @@
+---
+- name: listen for events from sensu
+  hosts: all
+
+  ## Define our source for events
+
+  sources:
+    - ansible.eda.webhook:
+        host: 0.0.0.0
+        port: 5000
+      filters:
+        - ansible.eda.normalize_keys:
+
+  ## chronyd process check
+
+  rules:
+    - name: test
+      condition: event.payload.check.state == 'failing' and event.payload.check.metadata.name == 'check-chronyd-process'
+      action:
+        run_job_template:
+          name: EDA restart chronyd
+          organization: Default

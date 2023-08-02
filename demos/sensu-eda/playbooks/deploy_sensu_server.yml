@@ -1,0 +1,28 @@
+---
+
+- name: deploy sensu container
+  hosts: all
+  become: true
+  tasks:
+  - name: create backend directory
+    ansible.builtin.file:
+      path: /var/lib/sensu
+      state: directory
+      mode: '0777'
+      owner: root
+      group: root
+
+  - name: deploy sensu container
+    containers.podman.podman_container:
+      name: sensu-server
+      image: docker.io/sensu/sensu-rhel:latest
+      command: sensu-backend start --state-dir /var/lib/sensu/sensu-backend
+      ports:
+        - "3000:3000"
+        - "8080:8080"
+        - "8081:8081"
+      env:
+        SENSU_BACKEND_CLUSTER_ADMIN_USERNAME: admin
+        SENSU_BACKEND_CLUSTER_ADMIN_PASSWORD: "{{ sensu_admin_password }}"
+      volume:
+        - /var/lib/sensu:/var/lib/sensu:rw

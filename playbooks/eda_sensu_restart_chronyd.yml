@@ -1,0 +1,11 @@
+---
+
+- name: restart chronyd after eda event
+  hosts: "{{ ansible_eda.event.payload.entity.metadata.name }}"
+  tasks:
+  - name: restart chronyd
+    ansible.builtin.service:
+      name: chronyd
+      state: started
+
+
