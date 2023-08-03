@@ -4,11 +4,16 @@
   hosts: all
   become: true
   tasks:
+  - name: install podman
+    ansible.builtin.dnf:
+      name: podman
+      state: present
+
   - name: create backend directory
     ansible.builtin.file:
-      path: /var/lib/sensu
+      path: /sensu_data
       state: directory
-      mode: '0777'
+      mode: '0755'
       owner: root
       group: root
 
@@ -25,4 +30,4 @@
         SENSU_BACKEND_CLUSTER_ADMIN_USERNAME: admin
         SENSU_BACKEND_CLUSTER_ADMIN_PASSWORD: "{{ sensu_admin_password }}"
       volume:
-        - /var/lib/sensu:/var/lib/sensu:rw
+        - /sensu_data:/var/lib/sensu:Z

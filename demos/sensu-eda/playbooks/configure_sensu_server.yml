@@ -1,9 +1,9 @@
 ---
 
-- hosts: all
+- hosts: localhost
   gather_facts: false
   vars:
-    eda_server_url: http://aap-eda.sandbox3009.opentlc.com:5000/endpoint
+    eda_server_url: http://ip-10-0-1-73.eu-west-1.compute.internal:5000/endpoint
     sensu_bonsai_assets:
     - name: sensu/sensu-ruby-runtime
       version: 0.1.0
@@ -16,19 +16,18 @@
   - name: install assets
     sensu.sensu_go.bonsai_asset:
       auth:
-        url: "http://{{ inventory_hostname }}:8080"
+        url: "http://{{ sensu_server }}:8080"
         user: admin
         password: "{{ sensu_admin_password }}"
         verify: false
       name: "{{ item.name }}"
       version: "{{ item.version }}"
-    delegate_to: localhost
     loop: "{{ sensu_bonsai_assets }}"
 
   - name: create handler
     sensu.sensu_go.pipe_handler:
       auth:
-        url: "http://{{ inventory_hostname }}:8080"
+        url: "http://{{ sensu_server }}:8080"
         user: admin
         password: "{{ sensu_admin_password }}"
         verify: false
@@ -39,12 +38,11 @@
       - is_incident
       - not_silenced
       - state_change_only
-    delegate_to: localhost
 
   - name: create event filter
     sensu.sensu_go.filter:
       auth:
-        url: "http://{{ inventory_hostname }}:8080"
+        url: "http://{{ sensu_server }}:8080"
         user: admin
         password: "{{ sensu_admin_password }}"
         verify: false
@@ -52,12 +50,11 @@
       action: allow
       expressions:
         - event.check.occurrences == 1
-    delegate_to: localhost
 
   - name: check-chronyd-service
     sensu.sensu_go.check:
       auth:
-        url: "http://{{ inventory_hostname }}:8080"
+        url: "http://{{ sensu_server }}:8080"
         user: admin
         password: "{{ sensu_admin_password }}"
         verify: false
@@ -72,16 +69,14 @@
       runtime_assets:
       - sensu-plugins/sensu-plugins-process-checks
       - sensu/sensu-ruby-runtime
-    delegate_to: localhost
 
   - name: create handler set for keepalive
     sensu.sensu_go.handler_set:
       auth:
-        url: "http://{{ inventory_hostname }}:8080"
+        url: "http://{{ sensu_server }}:8080"
         user: admin
         password: "{{ sensu_admin_password }}"
         verify: false
       name: keepalive
       handlers:
         - eda_sensu
-    delegate_to: localhost
