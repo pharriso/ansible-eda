@@ -22,6 +22,13 @@ These variables are needed to deploy and configure sensu
 | sensu_server              |                       | sensu server fqdn                                                                |
 | sensu_admin_password      |                       | sensu admin password                                                             |
 
+These variables are needed to configure sensu server to send webhooks to EDA.
+
+| Name                      | Default value         |                                                                                  |
+|---------------------------|-----------------------|----------------------------------------------------------------------------------|
+| eda_server_url            | http://edaserver.example.com:5000/endpoint                      | URL for eda server                                                               |
+
+
 Deploying sensu server
 ------------
 
