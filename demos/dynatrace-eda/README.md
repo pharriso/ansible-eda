@@ -53,10 +53,29 @@ dt.davis.analysis_trigger_delay: 0
 
 In order for EDA to know what host it should remediate, you might need to update the following:
 
-Settings -> Monitoring -> OS Services Monitoring -> select policy or create a new one
+Settings -> Monitoring -> OS Services Monitoring -> select policy or create a new one.
+
+Add a property for hostname.
 
 ![](images/dyna-config.png)
 
 Now the hostname should be sent:
 
 ![](images/dyna-eda-client.png)
+
+3. Setup webhook. In Dynatrace setup notifications for problems. Select a custom notification and give the URL for your EDA instance. For example:
+
+```bash
+http://edaserver.example.com:5000/endpoint
+```
+
+Also add the following to the payload:
+
+```bash
+{
+  "State":"{State}",
+  "ProblemID":"{ProblemID}",
+  "ProblemTitle":"{ProblemTitle}",
+  "ProblemDetails":{ProblemDetailsJSON}
+}
+```
