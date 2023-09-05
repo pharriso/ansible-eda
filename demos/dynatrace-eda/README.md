@@ -55,8 +55,8 @@ In order for EDA to know what host it should remediate, you might need to update
 
 Settings -> Monitoring -> OS Services Monitoring -> select policy or create a new one
 
-![](/images/dyna-config.png)
+![](images/dyna-config.png)
 
 Now the hostname should be sent:
 
-![](/images/dyna-eda-client.png)
+![](images/dyna-eda-client.png)
