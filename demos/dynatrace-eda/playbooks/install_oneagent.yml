@@ -1,0 +1,17 @@
+---
+
+- hosts: all
+  # uncomment for windows client
+  #connection: winrm
+  vars:
+  # uncomment for windows client
+  #  ansible_winrm_server_cert_validation: ignore
+  #  ansible_winrm_transport: basic
+    oneagent_environment_url: 'https://<instance>.live.dynatrace.com'
+    oneagaent_paas_token: <token from dynatrace ui>
+    # path to windows installer on local machine
+    #oneagent_local_installer: /home/pharriso/dynatrace/Dynatrace-OneAgent-Windows-1.267.125.20230613-102915.exe
+    # path to linux installer on local machine
+    oneagent_local_installer: /home/pharriso/dynatrace/Dynatrace-OneAgent-Linux-1.267.146.20230626-190217.sh
+  roles:
+  - dynatrace.oneagent.oneagent
