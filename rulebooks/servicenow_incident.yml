@@ -1,0 +1,23 @@
+---
+- name: listen for Dynatrace events
+  hosts: all
+
+  ## Define our source for events
+
+  sources:
+    - name: webhook from dynatrace
+      ansible.eda.webhook:
+        host: 0.0.0.0
+        port: 5000
+      filters:
+        - ansible.eda.normalize_keys:
+
+  ## OS Service Monitoring
+
+  rules:
+    - name: test for servicenow incident
+      condition: event.payload
+      action:
+        run_job_template:
+          name: Demo Job Template
+          organization: Default
