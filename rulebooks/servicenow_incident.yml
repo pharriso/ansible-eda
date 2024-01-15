@@ -16,8 +16,8 @@
 
   rules:
     - name: test for servicenow incident
-      condition: event.payload
+      condition: incident is defined
       action:
         run_job_template:
-          name: Demo Job Template
+          name: snow test
           organization: Default
