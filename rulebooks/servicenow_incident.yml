@@ -16,7 +16,7 @@
 
   rules:
     - name: Linux EDA Service restarts
-      condition: number is defined # and description is search("Linux Service is not running", ignorecase=true)
+      condition: description is search("Linux Service is not running", ignorecase=true)
       action:
         run_job_template:
           name: Linux EDA Restart Service
