@@ -15,9 +15,9 @@
   ## OS Service Monitoring
 
   rules:
-    - name: test for servicenow incident
-      condition: incident is defined
+    - name: Linux EDA Service restarts
+      condition: incident is defined and short_description is search("Linux Service is not running")
       action:
         run_job_template:
-          name: snow test
+          name: Linux EDA Restart Service
           organization: Default
