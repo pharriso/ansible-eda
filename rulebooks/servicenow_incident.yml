@@ -16,7 +16,7 @@
 
   rules:
     - name: Linux EDA Service restarts
-      condition: description is search("Linux", ignorecase=true, multiline=true)
+      condition: event.payload.number is defined and event.payload.description is search("Linux EDA Service", ignorecase=true, multiline=true)
       action:
         run_job_template:
           name: Linux EDA Restart Service
