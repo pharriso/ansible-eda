@@ -1,0 +1,61 @@
+---
+
+- name: eda restart service from servicenow incident
+  hosts: "{{ ansible_eda.event.payload.ci_name }}"
+  tasks:
+  - name: print servicenow incident number
+    ansible.builtin.debug:
+      msg: "ServiceNow Incident Number - {{ ansible_eda.event.payload.number }}"
+
+  - name: move incident to in_progress
+    servicenow.itsm.incident:
+      number: "{{ ansible_eda.event.payload.number }}"
+      state: in_progress
+      other:
+        work_notes: "Event Driven Ansible is investigating"
+    delegate_to: localhost
+    register: update_incident
+    retries: 5
+    delay: 10
+    until: update_incident is not failed
+
+  - name: set fact for failed service
+    ansible.builtin.set_fact:
+      failed_service: "{{ ansible_eda.event.payload.description.split('-')[1] | trim }}"
+
+  - name: restart service {{ failed_service }}
+    ansible.builtin.service:
+      name: "{{ failed_service }}"
+      state: started
+
+  - name: get service status
+    ansible.builtin.command:
+      cmd: systemctl status {{ failed_service }}
+    register: service_status
+
+  - name: add service state to incident
+    servicenow.itsm.incident:
+      number: "{{ ansible_eda.event.payload.number }}"
+      state: in_progress
+      other:
+        work_notes: "{{ service_status }}"
+    delegate_to: localhost
+    register: update_incident
+    retries: 5
+    delay: 10
+    until: update_incident is not failed
+
+  - name: close servicenow incident
+    servicenow.itsm.incident:
+      state: resolved
+      number: "{{ ansible_eda.event.payload.number }}"
+      close_code: "Solved (Permanently)"
+      close_notes: "Resolved by Event Driven Ansible."
+      caller: admin
+      other:
+        work_notes: "Event Driven Ansible has resolved the incident. Leaving it open for review."
+    delegate_to: localhost
+    register: update_incident
+    retries: 5
+    delay: 10
+    until: update_incident is not failed
