@@ -1,11 +1,11 @@
 ---
-- name: listen for Dynatrace events
+- name: listen for incidents from ServiceNow
   hosts: all
 
   ## Define our source for events
 
   sources:
-    - name: webhook from dynatrace
+    - name: webhook from servicenow business rules
       ansible.eda.webhook:
         host: 0.0.0.0
         port: 5000
