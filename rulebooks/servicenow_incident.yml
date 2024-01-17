@@ -9,14 +9,14 @@
       ansible.eda.webhook:
         host: 0.0.0.0
         port: 5000
-      #filters:
-      #  - ansible.eda.normalize_keys:
+      filters:
+       - ansible.eda.normalize_keys:
 
   ## OS Service Monitoring
 
   rules:
     - name: Linux EDA Service restarts
-      condition: event.payload.number is defined and event.payload.description is search("Linux Service is not running", ignorecase=true, multiline=true)
+      condition: event.payload.number is defined and event.payload.description is search("Linux Service is not running", ignorecase=true)
       action:
         run_job_template:
           name: Linux EDA Restart Service
