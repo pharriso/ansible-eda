@@ -21,3 +21,10 @@
         run_job_template:
           name: Linux EDA Restart Service
           organization: Default
+
+    - name: Linux EDA disk pressure
+      condition: event.payload.number is defined and event.payload.description is search("Linux Filesystem", ignorecase=true)
+      action:
+        run_job_template:
+          name: Linux EDA Filesystem
+          organization: Default
