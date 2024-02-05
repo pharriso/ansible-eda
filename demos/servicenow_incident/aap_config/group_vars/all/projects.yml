@@ -1,0 +1,16 @@
+---
+controller_projects:
+  - name: "eda demo"
+    description: ""
+    organization: "Default"
+    scm_type: "git"
+    scm_url: "https://github.com/pharriso/ansible-eda.git"
+    scm_credential: ""
+    scm_branch: ""
+    scm_clean: "True"
+    scm_delete_on_update: "True"
+    scm_update_on_launch: "False"
+    scm_update_cache_timeout: "0"
+    allow_override: "False"
+    timeout: 0
+

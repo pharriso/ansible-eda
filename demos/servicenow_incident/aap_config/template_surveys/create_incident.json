@@ -1,0 +1,30 @@
+{
+    "name": "",
+    "spec": [
+        {
+            "max": 1024,
+            "min": 0,
+            "type": "text",
+            "choices": "",
+            "default": "Linux Service is not running - chronyd",
+            "required": true,
+            "variable": "incident_description",
+            "new_question": true,
+            "question_name": "Incident Description",
+            "question_description": ""
+        },
+        {
+            "max": 1024,
+            "min": 0,
+            "type": "text",
+            "choices": "",
+            "default": "aap-eda.sandbox2300.opentlc.com",
+            "required": true,
+            "variable": "incident_ci",
+            "new_question": true,
+            "question_name": "Affected Configuration Item",
+            "question_description": ""
+        }
+    ],
+    "description": ""
+}

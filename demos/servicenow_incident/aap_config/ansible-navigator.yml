@@ -1,0 +1,10 @@
+---
+ansible-navigator:
+  mode: stdout
+  playbook-artifact:
+    enable : false
+  execution-environment:
+    container-engine: docker
+    image: quay.io/pharriso/deploy-aap:1.2
+    pull:
+      policy: missing

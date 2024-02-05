@@ -1,0 +1,21 @@
+---
+controller_templates:
+- name: Create ServiceNow Incident
+  job_type: run
+  inventory: Demo Inventory
+  survey_enabled: true
+  survey: "{{ lookup('template', 'template_surveys/create_incident.json') | regex_replace('\\n', '') }}"
+  project: eda demo
+  playbook: demos/servicenow_incident/playbooks/eda_servicenow_incident_create_incident.yml
+  credentials:
+  - servicenow
+- name: Linux EDA Restart Service
+  job_type: run
+  inventory: Demo Inventory
+  project: eda demo
+  playbook: demos/servicenow_incident/playbooks/eda_servicenow_incident_restart_service.yml
+  become_enabled: true
+  ask_variables_on_launch: true
+  credentials:
+  - aap user ssh key
+  - servicenow

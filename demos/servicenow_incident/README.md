@@ -62,3 +62,26 @@ On the "advanced" tab the script looks like this:
 
 This was adapted from https://www.transposit.com/devops-blog/itsm/creating-webhooks-in-servicenow/
 
+
+AAP setup
+------------
+
+Edit vault file with ServiceNow and controller details:
+
+```bash
+ansible-vault edit group_vars/all/vault.yml 
+```
+
+Run the playbook to configure controller:
+
+```bash
+ansible-navigator run configure_controller.yml --ask-vault-pass
+```
+
+Extra manual steps I haven't automated yet:
+
+* Create a token for eda application and paste into EDA controller
+* Create rulebook and project in EDA controller
+* Ensure ServiceNow host has relevant CI in the Linux DB
+* Add the same CI to the Demo inventory in controller
+* Paste the aap users private key into the credential in controller
