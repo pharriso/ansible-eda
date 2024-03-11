@@ -1,0 +1,23 @@
+---
+- name: check my website
+  hosts: all
+
+  ## Define our source for events
+
+  sources:
+    - ansible.eda.url_check:
+        urls:
+        - https://controller.pharriso.demolab.local/api/v2/
+        delay: 10
+
+  ## Define the conditions we are looking for
+
+  rules:
+    - name: Say Hello
+      condition: event.url_check.status == "down"
+
+  ## Define the action we should take should the condition be met
+
+      action:
+        run_playbook:
+

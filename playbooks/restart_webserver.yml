@@ -1,0 +1,10 @@
+---
+
+- name: restart webserver playbook
+  hosts: controller.pharriso.demolab.local
+  become: true
+  tasks: 
+  - name: start nginx
+    ansible.builtin.service:
+      name: nginx
+      state: started
