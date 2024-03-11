@@ -13,7 +13,7 @@
   ## Define the conditions we are looking for
 
   rules:
-    - name: Say Hello
+    - name: check for failed webserver
       condition: event.url_check.status == "down"
 
   ## Define the action we should take should the condition be met
