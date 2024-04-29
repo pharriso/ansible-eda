@@ -8,7 +8,7 @@
         topic: kafka-test-topic
   rules:
     - name: kafka
-      condition: event.message is defined
+      condition: message is defined
       action:
         debug: 
           var: event
