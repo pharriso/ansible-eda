@@ -11,4 +11,4 @@
       condition: message is defined
       action:
         debug: 
-          var: message
+          var: event.body.message
