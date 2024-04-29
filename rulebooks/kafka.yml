@@ -9,7 +9,7 @@
         group_id: ansible-eda
   rules:
     - name: kafka
-      condition: event.payload is defined
+      condition: event.message is defined
       action:
         debug: 
           var: event
