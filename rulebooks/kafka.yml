@@ -1,0 +1,15 @@
+---
+- name: Hello Kafka Event
+  hosts: all
+  sources:
+    - ansible.eda.kafka:
+        host: eda-streams-kafka-bootstrap.amqstreams.svc.cluster.local
+        port: 9092
+        topic: kafka-test-topic
+        group_id: ansible-eda
+  rules:
+    - name: kafka
+      condition: event.payload is defined
+      action:
+        debug: 
+          var: event
