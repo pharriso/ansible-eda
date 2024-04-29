@@ -6,7 +6,6 @@
         host: eda-streams-kafka-bootstrap.amqstreams.svc.cluster.local
         port: 9092
         topic: kafka-test-topic
-        group_id: ansible-eda
   rules:
     - name: kafka
       condition: event.message is defined
