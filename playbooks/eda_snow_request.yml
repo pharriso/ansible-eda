@@ -6,4 +6,4 @@
   - name: add linux user
     ansible.builtin.user:
       name: "{{ ansible_eda.event.payload.linux_username }}"
-      comment: "{{ ansible_eda.event.payload.linux_user }}"
+      comment: "{{ ansible_eda.event.payload.linux_name }}"
