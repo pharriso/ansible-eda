@@ -1,7 +1,7 @@
 ---
 
 - name: ServiceNow catalog example
-  hosts: "{{ ansible_eda.event.payload.entity.metadata.name }}"
+  hosts: "{{ ansible_eda.event.payload.linux_ci }}"
   tasks:
   - name: add linux user
     ansible.builtin.user:
