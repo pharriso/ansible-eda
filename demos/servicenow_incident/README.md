@@ -24,6 +24,8 @@ In the **When to Run** section:
 
 On the **advanced** tab, paste this sample script. This will send a json payload to EDA which contains the CI name, incident number and incident short description.
 
+**NOTE** make sure you substitute your EDA instance and port number in the example below - this line **r.setEndpoint("http://eda.example.com:5000/endpoint");**
+
 ```bash
 (function executeRule(current, previous /*null when async*/ ) {
  try {
@@ -66,6 +68,38 @@ On the **advanced** tab, paste this sample script. This will send a json payload
 ```
 
 This was adapted from https://www.transposit.com/devops-blog/itsm/creating-webhooks-in-servicenow/
+
+
+Quick and easy test
+------------
+
+SSH to your EDA controller and install netcat:
+
+```bash
+sudo dnf install nc -y
+```
+
+Start listening on port 5000
+
+```bash
+nc -l 5000
+```
+
+Create a ServiceNow Incident using the playbook in this repo or manually. Make sure you actually set a valid CI or it might not work.
+
+
+You'll see this payload come through to your EDA controller. If this works you can create a rulebook. Examples in this repo.
+
+```bash
+$ nc -l 5000
+^[[BPOST /endpoint HTTP/1.1
+Content-Length: 73
+X-SNC-INTEGRATION-SOURCE: b3331a101b02b5941024eb9b2d4bcbfb
+User-Agent: ServiceNow/1.0
+Host: eda.example.com:5000
+
+{"number":"INC0010004","short_description":"testing","ci_name":"lnux100"}
+```
 
 
 AAP setup
