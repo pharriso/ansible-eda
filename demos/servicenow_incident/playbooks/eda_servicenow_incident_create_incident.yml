@@ -13,7 +13,7 @@
       urgency: low
       other:
         cmdb_ci: "{{ incident_ci }}"
-        assignment_group: eda
+        assignment_group: "Event Driven Ansible"
     register: incident_number
     retries: 5
     delay: 10
