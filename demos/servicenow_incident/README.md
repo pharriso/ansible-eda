@@ -7,19 +7,28 @@ For this demo, we use ServiceNow business rules to send event to EDA each time a
 ServiceNow Business rule
 ------------
 
-Setup a business rule in ServiceNow. On the "When to run" tab:
+Setup a business rule in ServiceNow. Navigate to **Activity subscriptions** -> **Administration** -> **Business rules** or just search for **Business rules**. Click "New" to create a new business rule. Fill in the first form:
 
-* Table should be set to "Incident".
-* When should be set to after.
-* Set to action on insert.
-* Add a condition. For example assignment group is equal to "eda".
+* Enter a name for the business rule
+* Table should be set to **Incident**
+* Tick the **Advanced** checkbox
 
-On the "advanced" tab the script looks like this:
+In the **When to Run** section:
+
+* Set action on insert.
+* when to run should be "after".
+* Add a condition. For example assignment group is equal to "Event Driven Ansible".
+
+
+![](images/eda_snow_business_rule.png)
+
+On the **advanced** tab, paste this sample script. This will send a json payload to EDA which contains the CI name, incident number and incident short description.
 
 ```bash
 (function executeRule(current, previous /*null when async*/ ) {
  try {
  var r = new sn_ws.RESTMessageV2();
+ // Enter EDA URL and port number here. In this one we have eda.example.com port 5000.
  r.setEndpoint("http://eda.example.com:5000/endpoint");
  r.setHttpMethod("post");
 
@@ -28,10 +37,6 @@ On the "advanced" tab the script looks like this:
  var ci = new GlideRecord('cmdb_ci');
  ci.get('sys_id', current.getValue("cmdb_ci"));
  var ci_name = ci.getValue('name');
-
- // Make sure to convert object references to values.
- // More info at: 
- // https://swissbytes.blogspot.com/2017/11/service-now-script-includes-make-sure.html
 
  var number = current.getValue("number");	
  var short_description = current.getValue("short_description");
