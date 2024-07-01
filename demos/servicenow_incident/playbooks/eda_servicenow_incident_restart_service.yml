@@ -21,7 +21,7 @@
 
   - name: set fact for failed service
     ansible.builtin.set_fact:
-      failed_service: "{{ ansible_eda.event.payload.description.split('-')[1] | trim }}"
+      failed_service: "{{ ansible_eda.event.payload.short_description.split('-')[1] | trim }}"
 
   - name: restart service {{ failed_service }}
     ansible.builtin.service:
