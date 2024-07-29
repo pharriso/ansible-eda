@@ -5,13 +5,13 @@
   tasks:
   - name: create an ec2 rhel instance
     amazon.aws.ec2_instance:
-    name: "{{ ec2_vm_name }}"
-    key_name: "aap_keypair"
-    vpc_subnet_id: subnet-03536932cc5b28edf
-    instance_type: "{{ ec2_instance_type }}"
-    security_group: aap-sg
-    network:
-      assign_public_ip: true
-    image_id: ami-013ad574c04bebb2f
-    tags:
-      demo: servicenow
+      name: "{{ ec2_vm_name }}"
+      key_name: "aap_keypair"
+      vpc_subnet_id: subnet-03536932cc5b28edf
+      instance_type: "{{ ec2_instance_type }}"
+      security_group: aap-sg
+      network:
+        assign_public_ip: true
+      image_id: ami-013ad574c04bebb2f
+      tags:
+        demo: servicenow
