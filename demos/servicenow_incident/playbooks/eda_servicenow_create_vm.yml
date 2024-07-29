@@ -6,6 +6,7 @@
   - name: create an ec2 rhel instance
     amazon.aws.ec2_instance:
       name: "{{ ec2_vm_name }}"
+      exact_count: "{{ ec2_instance_count }}"
       region: eu-west-1
       key_name: "aap_keypair"
       vpc_subnet_id: subnet-03536932cc5b28edf
