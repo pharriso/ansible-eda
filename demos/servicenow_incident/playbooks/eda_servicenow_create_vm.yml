@@ -5,13 +5,13 @@
   tasks:
   - name: create an ec2 rhel instance
     amazon.aws.ec2_instance:
-      name: "{{ ec2_vm_name }}"
-      exact_count: "{{ ec2_instance_count }}"
+      name: "{{ ansible_eda.event.payload.ec2_vm_name }}"
+      exact_count: "{{ ansible_eda.event.payload.ec2_instance_count }}"
       state: running
       region: eu-west-1
       key_name: "aap_keypair"
       vpc_subnet_id: subnet-03536932cc5b28edf
-      instance_type: "{{ ec2_instance_type }}"
+      instance_type: "{{ ansible_eda.event.payload.ec2_instance_type }}"
       security_group: aap-sg
       network:
         assign_public_ip: true
