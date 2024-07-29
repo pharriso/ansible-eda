@@ -19,5 +19,5 @@
       condition: event.payload.number is defined
       action:
         run_job_template:
-          name: Linux EDA Add User
+          name: Create RHEL ec2
           organization: Default
