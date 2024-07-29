@@ -12,6 +12,12 @@
       vpc_subnet_id: subnet-03536932cc5b28edf
       instance_type: "{{ ec2_instance_type }}"
       security_group: aap-sg
+      user_data: |
+        #cloud-config
+        users:
+          - name: aap
+            ssh_authorized_keys:
+            - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC2tPkuNzIdjOQhTD5p0d0Lg7Ddt+aN0pIKKSaN7SYtAAJWMDYnKby9+nVsKbm0c+Xv5i8uZ2Fo7mScogOL0V4Yn2o/96aGIVdA3t/Z4RH00+oYg1PTDWtnVc922Uau0/67/JNaI0aK8dKKZnUiYt1XFe58jZrjneJdEkERODIf+xdf/0S/PFkw6j0YJJSaSU4z7U5QWwp6lhi9bvMsPFNRW6yuoQxY8HttsJBcQ6lvZOxTW5P47cnkh1nTNnciOx/407jSv0aR0WSx0/g1grGnZjTLgw8LDsiB0w9+AdGUT2rW0+dZ53h+6Cw9V+7WkZjX6QQhC37WfwIHBdV/DDGt pharriso@laptop
       network:
         assign_public_ip: true
       image_id: ami-013ad574c04bebb2f
