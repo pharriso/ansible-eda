@@ -43,3 +43,10 @@
     loop: "{{ found_instances.instances }}"
     loop_control:
       label: "{{ item.public_ip_address }}"
+
+- hosts: new_vms
+  tasks:
+  - name: install httpd
+    ansible.builtin.dnf:
+      name: httpd
+      state: installed
