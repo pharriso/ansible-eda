@@ -16,3 +16,29 @@
       image_id: ami-013ad574c04bebb2f
       tags:
         demo: servicenow
+
+  - name: find instances
+    ec2_instance_info:
+      region: eu-west-1
+      filters:
+        "tag:demo": servicenow
+        instance-state-name: [ "running" ]
+    register: found_instances
+
+  - name: wait for connection
+    ansible.builtin.wait_for:
+      host: "{{ item.public_ip_address }}"
+      port: "{{ check_port | default(22) }}"
+      delay: 5
+    loop: "{{ found_instances.instances }}"
+    loop_control:
+      label: "{{ item.public_ip_address }}"
+
+  - name: add hosts to play
+    ansible.builtin.add_host:
+      name: "{{ item.public_ip_address }}"
+      groups:
+      - new_vms
+    loop: "{{ found_instances.instances }}"
+    loop_control:
+      label: "{{ item.public_ip_address }}"
