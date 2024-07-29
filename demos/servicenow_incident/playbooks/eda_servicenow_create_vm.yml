@@ -13,12 +13,6 @@
       vpc_subnet_id: subnet-03536932cc5b28edf
       instance_type: "{{ ec2_instance_type }}"
       security_group: aap-sg
-      user_data: |
-        #cloud-config
-        users:
-          - name: aap
-            ssh_authorized_keys:
-            - ssh-rsa ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCyY83E7JEBvLbKS01PrQaLwKNuWb/SawoYbWF3am1Y5scEyKedyR77Xml6fI1Cyuc5pw/0qUTbqdTFW1i4oH/xCnK4kkvgIWMcV3sIrAaJLVGi/UB2g/yv+MWabxeLEZpwOUtdMOi1ACHal/kgOqH4hFVIKw2TQ7Xu0KElxSTll2AofEfqB+zAL0ysyvg5GasK9iVZJjbTJ42cslTgQAofq1mzo5osP1SS+bB8gdRZ7iVgND/wc9wmzTRRL6ug9Fr9TSyPvpKMtYuVsTADhHu8/RwXCHPraQ0CC7ZKsBedYMIvx7VVOZXCo568mdIfJhXVDiP5q89+gmo26I1m9vRtVFCo3FxSbP9upOBU41HmjR8rXhFc0qNcc4KhOWs07og3Jp095xrHuy9PLcyIhbbGpJTI75PUqylE3M5rFf1VpneN3aeVxJUkYYDE+hWe4Xaxu41mKYPxBRdMVfgFJGqBeLgIiU7blfA5oL6tzHszKknEbW5gfRqo/ka0Qrv6MfzVEjos7Tp3VbEacJp9jcYs4rUVmVmj+gzGlPe3wxjsaIBpvf1OX0wgoCYNBc6g9A+TytvxeLTBvdDo9QL6yc8uMCdpbiENb6LyqHdNKCbldgEhBPs1WtBvpGTMFijxQB8/nWF8JE7kU4mLthuOCT5aMCRcPfZiWb+giKp7v/NQaQ==
       network:
         assign_public_ip: true
       image_id: ami-013ad574c04bebb2f
