@@ -19,7 +19,7 @@
         demo: servicenow
 
   - name: find instances
-    ec2_instance_info:
+    amazon.aws.ec2_instance_info:
       region: eu-west-1
       filters:
         "tag:demo": servicenow
