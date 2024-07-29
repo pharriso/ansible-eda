@@ -45,6 +45,7 @@
       label: "{{ item.public_ip_address }}"
 
 - hosts: new_vms
+  become: true
   tasks:
   - name: install httpd
     ansible.builtin.dnf:
