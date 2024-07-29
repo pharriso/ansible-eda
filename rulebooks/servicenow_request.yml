@@ -16,7 +16,7 @@
 
   rules:
     - name: Linux EDA ServiceNow catalog example
-      condition: event.payload.number is defined
+      condition: event.payload.snow_request is defined
       action:
         run_job_template:
           name: Create RHEL ec2
