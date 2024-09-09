@@ -1,7 +1,7 @@
 ---
 
 - name: restart systemd service after eda event
-  hosts: "{{ ansible_eda.event.payload.commonLabels.instance | urlsplit('hostname') }}"
+  hosts: "{{ ansible_eda.event.payload.commonLabels.instance.split(':')[0] }}"
   tasks:
   - name: restart chronyd
     ansible.builtin.debug:
