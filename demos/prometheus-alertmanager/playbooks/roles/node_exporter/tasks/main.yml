@@ -1,0 +1,34 @@
+---
+
+- name: unpack node_exporter binary
+  ansible.builtin.unarchive:
+    src: https://github.com/prometheus/node_exporter/releases/download/v1.8.2/node_exporter-1.8.2.linux-amd64.tar.gz
+    dest: /tmp/
+    remote_src: true
+
+- name: move node_exporter binary to /usr/local/bin
+  ansible.builtin.copy:
+    src: /tmp//node_exporter-1.8.2.linux-amd64/node_exporter
+    dest: /usr/local/bin/node_exporter
+    remote_src: true
+    mode: 0755
+    owner: root
+    group: root
+
+- name: copy systemctl file across
+  ansible.builtin.copy:
+    src: node_exporter.service
+    dest: /usr/lib/systemd/system/node_exporter.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: reload systemd
+  ansible.builtin.systemd:
+    daemon-reload: true
+
+- name: start node_exporter service
+  ansible.builtin.systemd:
+    name: node_exporter
+    state: started
+    enabled: true

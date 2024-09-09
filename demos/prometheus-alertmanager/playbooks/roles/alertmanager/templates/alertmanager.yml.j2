@@ -1,0 +1,10 @@
+route:
+  receiver: eda_webhook
+  repeat_interval: 30s
+  group_wait: 15s
+  group_interval: 15s
+
+receivers:
+  - name: eda_webhook
+    webhook_configs:
+      - url: '{{ eda_webhook_url }}'

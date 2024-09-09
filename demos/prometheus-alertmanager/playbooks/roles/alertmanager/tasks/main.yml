@@ -1,0 +1,38 @@
+---
+
+- name: create alertmanager directory
+  ansible.builtin.file:
+    state: directory
+    path: /etc/alertmanager/
+    mode: 0755
+    owner: root
+    group: root
+
+- name: create alertmanager configuration file
+  ansible.builtin.template:
+    src: alertmanager.yml.j2
+    dest: /etc/alertmanager/alertmanager.yml
+    owner: root
+    group: root
+    mode: 0644
+
+- name: create alertmanager podman quadlet
+  containers.podman.podman_container:
+    name: alertmanager
+    state: quadlet
+    ports:
+      - "9093:9093"
+    volumes:
+      - /etc/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:z
+    image: quay.io/prometheus/alertmanager
+    quadlet_filename: alertmanager
+
+- name: reload systemd
+  ansible.builtin.systemd:
+    daemon-reload: true
+
+- name: start alertmanager service
+  ansible.builtin.systemd:
+    name: alertmanager
+    state: started
+    enabled: true

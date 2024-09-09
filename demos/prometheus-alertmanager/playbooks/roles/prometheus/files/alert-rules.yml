@@ -1,0 +1,21 @@
+groups:
+- name: eda-demo
+  rules:
+
+  # alert if selinux is disabled
+  - alert: selinux status
+    expr: node_selinux_current_mode == 0
+    labels:
+      severity: warning
+    annotations:
+      summary: "Selinux is disabled on {{ $labels.instance }}"
+      description: "Selinux has been set to permissive on {{ $labels.instance }}"
+
+  - alert: systemd failed service
+    expr: node_systemd_unit_state{state="failed"} == 1
+    labels:
+      severity: warning
+    annotations:
+      summary: "Host systemd service failed (instance {{ $labels.instance }})"
+      description: "systemd service failed\n  VALUE = {{ $value }}"
+

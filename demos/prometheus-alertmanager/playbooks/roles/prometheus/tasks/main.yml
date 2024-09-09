@@ -1,0 +1,47 @@
+---
+
+- name: create prometheus directory
+  ansible.builtin.file:
+    state: directory
+    path: /etc/prometheus/
+    mode: 0755
+    owner: root
+    group: root
+
+- name: create prometheus configuration file
+  ansible.builtin.template:
+    src: prometheus.yml.j2
+    dest: /etc/prometheus/prometheus.yml
+    owner: root
+    group: root
+    mode: 0644
+
+- name: create alert rules file
+  ansible.builtin.copy:
+    src: alert-rules.yml
+    dest: /etc/prometheus/alert-rules.yml
+    mode: 0644
+    owner: root
+    group: root
+
+- name: create prometheus podman quadlet
+  containers.podman.podman_container:
+    name: prometheus
+    state: quadlet
+    ports:
+      - "9090:9090"
+    volumes:
+      - /etc/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:z
+      - /etc/prometheus/alert-rules.yml:/etc/prometheus/alert-rules.yml:z
+    image: docker.io/prom/prometheus
+    quadlet_filename: prometheus
+
+- name: reload systemd
+  ansible.builtin.systemd:
+    daemon-reload: true
+
+- name: start prometheus service
+  ansible.builtin.systemd:
+    name: prometheus
+    state: started
+    enabled: true

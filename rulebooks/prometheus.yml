@@ -1,0 +1,30 @@
+---
+- name: listen for requests from prometheus alertmanager
+  hosts: all
+
+  ## Define our source for events
+
+  sources:
+    - name: webhook from prometheus alertmanager
+      ansible.eda.webhook:
+        host: 0.0.0.0
+        port: 3000
+      filters:
+       - ansible.eda.normalize_keys:
+
+  ## OS Linux Requests
+
+  rules:
+    - name: alertmanager selinux alert
+      condition: event.payload.status == "firing" and event.payload.commonLabels.alertname == "selinux status"
+      action:
+        run_job_template:
+          name: alertmanager eda selinux
+          organization: demolab
+
+    - name: alertmanager systemd alert
+      condition: event.payload.status == "firing" and event.payload.commonLabels.alertname == "systemd failed service"
+      action:
+        run_job_template:
+          name: alertmanager eda systemd
+          organization: demolab
