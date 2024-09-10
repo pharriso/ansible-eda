@@ -2,7 +2,23 @@
 
 - name: restart systemd service after eda event
   hosts: "{{ ansible_eda.event.payload.commonLabels.instance.split(':')[0] }}"
+  pre_tasks:
+  - name: assert that we only have one host in the play
+    ansible.builtin.assert:
+      that:
+        - ansible_play_hosts | length <= 1
+      fail_msg: 'Should only be one host in the play.'
+    run_once: true
   tasks:
-  - name: restart chronyd
+  - name: set fact failed service
+    ansible.builtin.set_fact:
+      failed_service: "{{ ansible_eda.event.payload.commonLabels.name }}"
+
+  - name: print name of failed service
     ansible.builtin.debug:
-      msg: restarting stuff
+      msg: Failed service is {{ failed_service }}
+
+  - name: restart {{ failed_service }}
+    ansible.builtin.service:
+      state: started
+      name: "{{ failed_service }}"
