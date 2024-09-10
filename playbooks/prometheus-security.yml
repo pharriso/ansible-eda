@@ -1,0 +1,16 @@
+---
+
+- name: enforce selinux after eda event
+  hosts: "{{ ansible_eda.event.payload.commonLabels.instance.split(':')[0] }}"
+  pre_tasks:
+  - name: assert that we only have one host in the play
+    ansible.builtin.assert:
+      that:
+        - ansible_play_hosts | length <= 1
+      fail_msg: 'Should only be one host in the play.'
+    run_once: true
+  tasks:
+  - name: ensure selinux is enforcing
+    ansible.posix.selinux:
+      policy: targeted
+      state: enforcing
