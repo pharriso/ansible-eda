@@ -19,6 +19,6 @@
       msg: Failed service is {{ failed_service }}
 
   - name: restart {{ failed_service }}
-    ansible.builtin.service:
+    ansible.builtin.systemd:
       state: started
       name: "{{ failed_service }}"
