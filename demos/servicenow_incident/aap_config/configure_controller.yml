@@ -7,7 +7,7 @@
     controller_username: "{{ controller_user }}"
     controller_password: "{{ controller_pass }}"
   collections:
-    - automation.controller
+    - awx.awx
     - redhat_cop.controller_configuration
   roles: 
     - dispatch
